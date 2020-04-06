@@ -1,3 +1,6 @@
+const express = require('express')
+const app = express();
+
 const { google } = require('googleapis');
 const calendar = google.calendar('v3');
 
@@ -10,20 +13,16 @@ const jwtClient = new google.auth.JWT(
     null
 );
 
+const PORT = 3000;
 const CALENDAR_ID = 'primary';
 
-calendar.events.list({
-    auth: jwtClient,
-    calendarId: CALENDAR_ID,
-}, (err, res) => {
-    if (err) return console.log('The API returned an error: ' + err);
-    const events = res.data.items;
-    if (events.length) {
-        events.map((event, i) => {
-            const start = event.start.dateTime || event.start.date;
-            console.log(`${start} - ${event.summary}`);
-        });
-    } else {
-        console.log('No upcoming events found.');
-    }
+app.get('/', (req, res) => {
+    calendar.events.list({
+        auth: jwtClient,
+        calendarId: CALENDAR_ID
+    }, (err, resp) => {
+        res.json(resp.data.items);
+    });
 });
+
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
