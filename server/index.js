@@ -1,4 +1,5 @@
-const express = require('express')
+const express = require('express');
+const cors = require('cors');
 const app = express();
 
 const { google } = require('googleapis');
@@ -13,8 +14,9 @@ const jwtClient = new google.auth.JWT(
     null
 );
 
-const PORT = 3000;
-const CALENDAR_ID = 'primary';
+const PORT = 3001;
+
+app.use(cors());
 
 app.get('/', (req, res) => {
     calendar.events.list({
