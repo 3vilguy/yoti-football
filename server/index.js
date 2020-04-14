@@ -1,5 +1,5 @@
 const express = require('express');
-const cors = require('cors');
+const path = require('path');
 const app = express();
 
 const { google } = require('googleapis');
@@ -15,10 +15,13 @@ const jwtClient = new google.auth.JWT(
 );
 
 const PORT = 3001;
+const CALENDAR_ID = 'primary';
 
-app.use(cors());
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '..', 'client', 'public')));
 
-app.get('/', (req, res) => {
+// Put all API endpoints under '/api'
+app.get('/api', (req, res) => {
     calendar.events.list({
         auth: jwtClient,
         calendarId: CALENDAR_ID
