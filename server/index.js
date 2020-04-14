@@ -1,3 +1,4 @@
+const dotenv = require('dotenv');
 const express = require('express');
 const path = require('path');
 const app = express();
@@ -5,17 +6,18 @@ const app = express();
 const { google } = require('googleapis');
 const calendar = google.calendar('v3');
 
-const key = require('./JSON_KEY.json');
+dotenv.config();
+
 const jwtClient = new google.auth.JWT(
-    key.client_email,
+    process.env.CLIENT_EMAIL,
     null,
-    key.private_key,
+    process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
     ['https://www.googleapis.com/auth/calendar'],
     null
 );
 
-const PORT = 3001;
-const CALENDAR_ID = 'primary';
+const PORT = process.env.PORT || 3001;
+const CALENDAR_ID = process.env.CALENDAR_ID || 'primary';
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '..', 'client', 'public')));
