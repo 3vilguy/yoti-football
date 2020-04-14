@@ -20,7 +20,7 @@ const PORT = process.env.PORT || 3001;
 const CALENDAR_ID = process.env.CALENDAR_ID || 'primary';
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, '..', 'client', 'public')));
+app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
 
 // Put all API endpoints under '/api'
 app.get('/api', (req, res) => {
