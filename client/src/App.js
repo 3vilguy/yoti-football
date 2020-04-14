@@ -5,7 +5,7 @@ function App() {
   const [eventsList, setEventsList] = useState([]);
 
   const fetchEvents = () => {
-    fetch("http://localhost:3001")
+    fetch("/api")
       .then(response => response.json())
       .then(data => setEventsList(data));
   };
