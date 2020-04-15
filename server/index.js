@@ -22,6 +22,9 @@ const CALENDAR_ID = process.env.CALENDAR_ID || 'primary';
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }))
+
 // Put all API endpoints under '/api'
 app.get('/api', (req, res) => {
     calendar.events.list({
@@ -29,6 +32,28 @@ app.get('/api', (req, res) => {
         calendarId: CALENDAR_ID
     }, (err, resp) => {
         res.json(resp.data.items);
+    });
+});
+
+app.post('/api/addEvent', (req, res) => {
+    const startDate = req.body.startDate;
+    const endDate = req.body.endDate;
+
+    calendar.events.insert({
+        auth: jwtClient,
+        calendarId: CALENDAR_ID,
+        resource: {
+            start: {
+                dateTime: startDate,
+                timeZone: 'Europe/London',
+            },
+            end: {
+                dateTime: endDate,
+                timeZone: 'Europe/London',
+            },
+        }
+    }, (err, resp) => {
+        res.json({})
     });
 });
 
