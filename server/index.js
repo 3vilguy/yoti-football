@@ -26,7 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
 // Put all API endpoints under '/api'
-app.get('/api', (req, res) => {
+app.get('/api/events', (req, res) => {
     calendar.events.list({
         auth: jwtClient,
         calendarId: CALENDAR_ID
