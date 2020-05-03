@@ -30,6 +30,8 @@ app.get('/api/events', (req, res) => {
     calendar.events.list({
         auth: jwtClient,
         calendarId: CALENDAR_ID,
+        singleEvents: true, // For showing recurring events as separate ones 
+        maxResults: 5,
     }, (err, resp) => {
         res.json(resp.data.items);
     });

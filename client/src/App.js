@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ReactDatePicker from 'react-datepicker';
+import EventsList from './components/EventsList';
 import "react-datepicker/dist/react-datepicker.css";
 import './App.css';
 
@@ -44,18 +45,10 @@ function App() {
         <button onClick={fetchEvents}>
           Get Events
         </button>
-        <ul>
-          {
-            eventsList.map(event => {
-              const start = event.start.dateTime || event.start.date;
-              return (
-                <li key={event.id}>
-                  {start} - {event.summary}
-                </li>
-              )
-            })
-          }
-        </ul>
+        <EventsList
+          eventsList={eventsList}
+          removeEvent={() => {}}
+        />
       </div>
 
       <h2>Add Event</h2>
