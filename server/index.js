@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }))
 app.get('/api/events', (req, res) => {
     calendar.events.list({
         auth: jwtClient,
-        calendarId: CALENDAR_ID
+        calendarId: CALENDAR_ID,
     }, (err, resp) => {
         res.json(resp.data.items);
     });
@@ -38,20 +38,27 @@ app.get('/api/events', (req, res) => {
 app.post('/api/addEvent', (req, res) => {
     const startDate = req.body.startDate;
     const endDate = req.body.endDate;
+    const isRecurring = req.body.recurring;
+
+    const event = {
+        start: {
+            dateTime: startDate,
+            timeZone: 'Europe/London',
+        },
+        end: {
+            dateTime: endDate,
+            timeZone: 'Europe/London',
+        },
+    }
+
+    if (isRecurring) {
+        event['recurrence'] = ['RRULE:FREQ=WEEKLY']
+    }
 
     calendar.events.insert({
         auth: jwtClient,
         calendarId: CALENDAR_ID,
-        resource: {
-            start: {
-                dateTime: startDate,
-                timeZone: 'Europe/London',
-            },
-            end: {
-                dateTime: endDate,
-                timeZone: 'Europe/London',
-            },
-        }
+        resource: event,
     }, (err, resp) => {
         res.json({})
     });

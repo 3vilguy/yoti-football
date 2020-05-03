@@ -6,6 +6,7 @@ import './App.css';
 function App() {
   const [eventsList, setEventsList] = useState([]);
   const [startDate, setStartDate] = useState(new Date());
+  const [repeatWeekly, setRepeatWeekly] = useState(false);
   const [addEventStatus, setAddEventStatus] = useState();
 
   const fetchEvents = () => {
@@ -21,7 +22,8 @@ function App() {
 
     const params = {
       startDate,
-      endDate
+      endDate,
+      recurring: repeatWeekly,
     };
 
     fetch("/api/addEvent", {
@@ -57,9 +59,17 @@ function App() {
       </div>
 
       <h2>Add Event</h2>
-      <div className="container">
+      <div className="container addEvents">
         Date:
         <ReactDatePicker selected={startDate} onChange={date => setStartDate(date)} />
+        <label>
+          <input
+            type="checkbox"
+            checked={repeatWeekly}
+            onChange={() => setRepeatWeekly(!repeatWeekly)}
+          />
+        Repeat weekly
+       </label>
         <button onClick={addEvent}>
           Add Event
         </button>
