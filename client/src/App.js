@@ -15,6 +15,7 @@ function App() {
       .then(response => response.json())
       .then(data => setEventsList(data));
   };
+
   const addEvent = () => {
     setAddEventStatus("Adding");
 
@@ -38,6 +39,25 @@ function App() {
       .then(data => setAddEventStatus("Done"));
   };
 
+  const removeEvent = id => {
+    const params = {
+      id,
+    };
+
+    fetch("/api/removeEvent", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(params)
+    })
+      .then(response => setEventsList(
+        eventsList.filter(
+          event => event.id !== id && event.recurringEventId !== id
+        )
+      ));
+  };
+
   return (
     <div>
       <h2>Event List</h2>
@@ -47,7 +67,7 @@ function App() {
         </button>
         <EventsList
           eventsList={eventsList}
-          removeEvent={() => {}}
+          removeEvent={removeEvent}
         />
       </div>
 
