@@ -64,4 +64,16 @@ app.post('/api/addEvent', (req, res) => {
     });
 });
 
+app.post('/api/removeEvent', (req, res) => {
+    const eventId = req.body.id;
+
+    calendar.events.delete({
+        auth: jwtClient,
+        calendarId: CALENDAR_ID,
+        eventId,
+    }, (err, resp) => {
+        res.json({})
+    });
+});
+
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
