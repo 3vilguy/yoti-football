@@ -1,4 +1,5 @@
 const express = require('express');
+require('./db/mongoose')
 const path = require('path');
 const app = express();
 
@@ -13,7 +14,6 @@ const jwtClient = new google.auth.JWT(
     null
 );
 
-const PORT = process.env.PORT;
 const CALENDAR_ID = process.env.CALENDAR_ID || 'primary';
 
 // Serve static files from the React app
@@ -75,4 +75,7 @@ app.post('/api/removeEvent', (req, res) => {
     });
 });
 
-app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+const port = process.env.PORT;
+app.listen(port, () => {
+    console.log(`Server is up on port ${port}`)
+})
