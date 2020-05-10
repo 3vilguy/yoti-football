@@ -1,7 +1,7 @@
 const express = require('express');
 require('./db/mongoose')
 const path = require('path');
-const app = express();
+const userRouter = require('./routers/user')
 
 const { google } = require('googleapis');
 const calendar = google.calendar('v3');
@@ -16,11 +16,15 @@ const jwtClient = new google.auth.JWT(
 
 const CALENDAR_ID = process.env.CALENDAR_ID || 'primary';
 
+const app = express();
+
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(userRouter)
 
 // Put all API endpoints under '/api'
 app.get('/api/events', (req, res) => {
