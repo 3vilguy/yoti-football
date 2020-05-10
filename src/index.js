@@ -23,7 +23,7 @@ const CALENDAR_ID = process.env.CALENDAR_ID || 'primary';
 app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }));
 
 // Put all API endpoints under '/api'
 app.get('/api/events', (req, res) => {
@@ -51,10 +51,10 @@ app.post('/api/addEvent', (req, res) => {
             dateTime: endDate,
             timeZone: 'Europe/London',
         },
-    }
+    };
 
     if (isRecurring) {
-        event['recurrence'] = ['RRULE:FREQ=WEEKLY']
+        event['recurrence'] = ['RRULE:FREQ=WEEKLY'];
     }
 
     calendar.events.insert({
