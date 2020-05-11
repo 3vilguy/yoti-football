@@ -14,7 +14,8 @@
   "dependencies": {
     "express": "4.17.1",
     "googleapis": "48.0.0",
-    "mongoose": "5.9.13"
+    "mongoose": "5.9.13",
+    "validator": "13.0.0"
   },
   "devDependencies": {
     "dotenv": "8.2.0",
