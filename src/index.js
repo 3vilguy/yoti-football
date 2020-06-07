@@ -1,20 +1,8 @@
 const express = require('express');
 require('./db/mongoose')
 const path = require('path');
-const userRouter = require('./routers/user')
-
-const { google } = require('googleapis');
-const calendar = google.calendar('v3');
-
-const jwtClient = new google.auth.JWT(
-    process.env.CLIENT_EMAIL,
-    null,
-    process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
-    ['https://www.googleapis.com/auth/calendar'],
-    null
-);
-
-const CALENDAR_ID = process.env.CALENDAR_ID || 'primary';
+const userRouter = require('./routers/user');
+const gameRouter = require('./routers/game');
 
 const app = express();
 
@@ -24,20 +12,10 @@ app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(userRouter)
+app.use(userRouter);
+app.use(gameRouter);
 
 // Put all API endpoints under '/api'
-app.get('/api/events', (req, res) => {
-    calendar.events.list({
-        auth: jwtClient,
-        calendarId: CALENDAR_ID,
-        singleEvents: true, // For showing recurring events as separate ones 
-        maxResults: 5,
-    }, (err, resp) => {
-        res.json(resp.data.items);
-    });
-});
-
 app.post('/api/addEvent', (req, res) => {
     const startDate = req.body.startDate;
     const endDate = req.body.endDate;
