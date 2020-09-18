@@ -1,5 +1,6 @@
 const express = require('express');
 const auth = require('../middleware/auth');
+const Game = require('../models/game');
 const {
     fetchCalendarEvents,
     fetchGames,
@@ -53,6 +54,38 @@ router.get('/api/games', auth, async (req, res) => {
             const games = await fetchGames(eventIds);
             res.send(games);
         }
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
+
+router.post('/api/games/join', auth, async (req, res) => {
+    try {
+        await Game.findByIdAndUpdate(
+            req.body.gameId,
+            {
+                $addToSet: {
+                    players: { playerId: req.user._id }
+                }
+            },
+        );
+        res.send();
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
+
+router.post('/api/games/leave', auth, async (req, res) => {
+    try {
+        await Game.findByIdAndUpdate(
+            req.body.gameId,
+            {
+                $pull: {
+                    players: { playerId: req.user._id }
+                }
+            },
+        );
+        res.send();
     } catch (e) {
         res.status(400).send(e);
     }

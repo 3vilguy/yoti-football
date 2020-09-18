@@ -12,7 +12,15 @@ const gameSchema = new mongoose.Schema({
     endTime: {
         type: Date,
         required: true,
-    }
+    },
+    players :[{
+        _id: false,
+        playerId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
+        }
+    }],
 });
 
 const Game = mongoose.model('Game', gameSchema);
