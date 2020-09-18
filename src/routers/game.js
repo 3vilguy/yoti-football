@@ -28,7 +28,7 @@ router.get('/api/games', auth, async (req, res) => {
                     throw new Error('Event without gameId');
                 }
             } catch (e) {
-                eventsWithoutId.push(event.id);
+                eventsWithoutId.push(event);
                 if (idCounter < GAMES_TO_RETURN) {
                     enoughEventsWithId = false;
                 }

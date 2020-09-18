@@ -10,10 +10,14 @@ const fetchCalendarEvents = async () => {
  * Creates new Games in DB that are linked to the calendar events.
  * Update calendar events with IDs of newly created Games.
  * 
- * @param {[String]} eventsWithoutId - array of calendar events without associated Game ID
+ * @param {[Object]} eventsWithoutId - array of calendar events without associated Game ID
  */
 const createGamesAndUpdateEvents = async (eventsWithoutId) => {
-    const eventsToUpdate = eventsWithoutId.map(calendarId => ({ calendarId }))
+    const eventsToUpdate = eventsWithoutId.map(event => ({
+        calendarId: event.id,
+        startTime: new Date(event.start.dateTime),
+        endTime: new Date(event.end.dateTime),
+    }));
 
     // Create games in DB
     const addedGames = await Game.collection.insertMany(eventsToUpdate);
@@ -21,7 +25,7 @@ const createGamesAndUpdateEvents = async (eventsWithoutId) => {
 
     // Update calendar events with game IDs
     const allUpdates = eventsWithoutId.map(
-        (eventId, index) => {
+        ({ id: eventId }, index) => {
             const updateBody = {
                 description: JSON.stringify({
                     gameId: newGamesIds[index]
